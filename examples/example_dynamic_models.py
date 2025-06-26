@@ -156,6 +156,12 @@ def example_function_analysis():
     print("Complex Function Analysis:")
     print(info)
 
+    # Analyze pydantic function
+    info = analyze_function(sample_pydantic_input)
+    print("Pydantic Function Analysis:")
+    print(info)
+
+
 
 if __name__ == "__main__":
     example_dynamic_model_creation()
