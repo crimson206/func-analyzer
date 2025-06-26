@@ -67,6 +67,9 @@ def analyze_function(func: Callable) -> dict:
     """
     sig = inspect.signature(func)
     
+    # Parse docstring for parameter descriptions
+    param_descriptions = parse_docstring_params(func.__doc__ or "")
+    
     return {
         'name': func.__name__,
         'module': func.__module__,
@@ -79,7 +82,8 @@ def analyze_function(func: Callable) -> dict:
                 'name': name,
                 'annotation': clean_annotation_string(param.annotation),
                 'default': param.default if param.default is not param.empty else None,
-                'kind': str(param.kind)
+                'kind': str(param.kind),
+                'description': param_descriptions.get(name)
             }
             for name, param in sig.parameters.items()
             if name not in ('self', 'cls')
