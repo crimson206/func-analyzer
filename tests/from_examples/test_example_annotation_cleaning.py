@@ -15,7 +15,9 @@ import json
 import importlib.util
 
 # Load the example module
-example_file_path = os.path.join(os.path.dirname(__file__), '../../examples/example_annotation_cleaning.py')
+example_file_path = os.path.join(
+    os.path.dirname(__file__), "../../examples/example_annotation_cleaning.py"
+)
 spec = importlib.util.spec_from_file_location("example_module", example_file_path)
 example_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(example_module)
@@ -23,26 +25,26 @@ spec.loader.exec_module(example_module)
 
 class TestAnnotation_Cleaning:
     """Auto-generated tests for examples/example_annotation_cleaning.py"""
-    
+
     def setup_method(self):
         """Setup test environment"""
         self.test_dir = tempfile.mkdtemp(prefix="test_")
         self.original_cwd = os.getcwd()
         os.chdir(self.test_dir)
-        
+
         # Create necessary directories based on example file structure
         self._setup_test_environment()
-    
+
     def teardown_method(self):
         """Cleanup test environment"""
         os.chdir(self.original_cwd)
         shutil.rmtree(self.test_dir, ignore_errors=True)
-    
+
     def _setup_test_environment(self):
         """Setup test environment - override in subclasses if needed"""
         # Create basic directory structure
         os.makedirs("examples", exist_ok=True)
-        
+
         # Copy any existing config files from original examples directory
         original_examples = os.path.join(self.original_cwd, "examples")
         if os.path.exists(original_examples):
@@ -74,4 +76,3 @@ class TestAnnotation_Cleaning:
         example_module.example_function_analysis_with_cleaning()
         # If no exception is raised, the test passes
         assert True
-

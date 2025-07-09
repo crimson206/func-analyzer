@@ -1,6 +1,6 @@
 [project]
 name = "func-analyzer"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python module for analyzing functions and extracting metadata including parameters, type hints, and docstrings"
 authors = [
     {name = "Sisung Kim",email = "sisung.kim1@gmail.com"}
