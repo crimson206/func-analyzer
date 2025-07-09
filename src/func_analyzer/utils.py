@@ -153,6 +153,81 @@ def parse_docstring_params(docstring: str, style: DocstringStyle = DocstringStyl
         return _parse_docstring_manual(docstring)
 
 
+def get_docstring_summary(docstring: str) -> str:
+    """
+    Extract the summary (first line) from a docstring.
+    
+    Args:
+        docstring: Function docstring
+        
+    Returns:
+        The first non-empty line of the docstring, or empty string if none
+    """
+    if not docstring:
+        return ""
+    
+    # Split into lines and find the first non-empty line
+    lines = docstring.strip().split('\n')
+    for line in lines:
+        line = line.strip()
+        if line:
+            return line
+    
+    return ""
+
+
+def get_docstring_description(docstring: str) -> str:
+    """
+    Extract the full description (everything after the summary) from a docstring.
+    
+    Args:
+        docstring: Function docstring
+        
+    Returns:
+        The description part of the docstring
+    """
+    if not docstring:
+        return ""
+    
+    lines = docstring.strip().split('\n')
+    
+    # Find the first non-empty line (summary)
+    summary_index = -1
+    for i, line in enumerate(lines):
+        if line.strip():
+            summary_index = i
+            break
+    
+    if summary_index == -1:
+        return ""
+    
+    # Find the start of description (after blank line following summary)
+    description_start = summary_index + 1
+    
+    # Skip any blank lines after summary
+    while description_start < len(lines) and not lines[description_start].strip():
+        description_start += 1
+    
+    if description_start >= len(lines):
+        return ""
+    
+    # Extract description until Args/Parameters/Returns section
+    description_lines = []
+    for line in lines[description_start:]:
+        # Stop at common section headers
+        if re.match(r'^\s*(Args|Arguments|Parameters|Returns|Yields|Raises|Note|Notes|Example|Examples):\s*$', line):
+            break
+        if re.match(r'^\s*(Args|Arguments|Parameters|Returns|Yields|Raises|Note|Notes|Example|Examples)\s*\n?\s*-+', '\n'.join(lines[description_start:]), re.MULTILINE):
+            break
+        description_lines.append(line)
+    
+    # Remove trailing empty lines
+    while description_lines and not description_lines[-1].strip():
+        description_lines.pop()
+    
+    return '\n'.join(description_lines).strip()
+
+
 def _parse_docstring_manual(docstring: str) -> Dict[str, str]:
     """Manual parsing fallback for common docstring patterns"""
     param_descriptions = {}
